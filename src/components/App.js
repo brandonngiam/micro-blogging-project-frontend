@@ -3,7 +3,13 @@ import "../styles/App.css";
 import Login from "./Login";
 import Signup from "./Signup";
 import Home from "./Home";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import Logout from "./Logout";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect
+} from "react-router-dom";
 import axios from "axios";
 class App extends React.Component {
   constructor(props) {
@@ -12,6 +18,7 @@ class App extends React.Component {
       process.env.NODE_ENV === "production"
         ? "https://twitta-backend.herokuapp.com"
         : "http://localhost:3001";
+    //change me
     this.state = {
       isLoggedin: false,
       userName: "",
@@ -65,7 +72,11 @@ class App extends React.Component {
 
   inputHandler = event => {
     this.setState({ [event.target.name]: event.target.value });
-    console.log(this.state);
+  };
+
+  logoutHandler = event => {
+    sessionStorage.removeItem("token");
+    this.setState({ isLoggedin: false });
   };
 
   componentDidMount() {
@@ -82,10 +93,27 @@ class App extends React.Component {
         {this.state.isLoggedin ? (
           <Router>
             <nav>
-              <Link to="/">Home</Link> <br />
+              <Redirect from="/" to="/home">
+                Home
+              </Redirect>
+              <Link to="/logout">Logout</Link>
             </nav>
             <main>
-              <Route exact path="/" component={Home} />
+              <Route
+                exact
+                path="/home"
+                render={props => <Home username={this.state.userName} />}
+              />
+              <Route
+                exact
+                path="/logout"
+                render={props => (
+                  <Logout
+                    logoutHandler={this.logoutHandler}
+                    username={this.state.userName}
+                  />
+                )}
+              />
             </main>
           </Router>
         ) : (

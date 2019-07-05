@@ -42,6 +42,7 @@ class App extends React.Component {
   };
 
   loginHandler = async event => {
+    event.preventDefault();
     //check username and password valid
     await axios
       .post(this.backendURI + "/login", {
@@ -50,7 +51,7 @@ class App extends React.Component {
       })
       .then(
         res => {
-          if (res.status === 201) {
+          if (res.status === 200) {
             console.log("Logged in");
             this.setState({ isLoggedin: true });
             sessionStorage.setItem("token", res.data.jwt);

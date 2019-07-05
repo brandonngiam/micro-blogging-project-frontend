@@ -10,7 +10,7 @@ class App extends React.Component {
     super(props);
     this.backendURI =
       process.env.NODE_ENV === "production"
-        ? "https://twita-backend.herokuapp.com"
+        ? "https://twitta-backend.herokuapp.com"
         : "http://localhost:3001";
     this.state = {
       isLoggedin: false,

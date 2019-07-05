@@ -19,25 +19,52 @@ class App extends React.Component {
     };
   }
 
-  signUpHandler = event => {
+  signUpHandler = async event => {
     event.preventDefault();
     //check username and password valid
-    console.log("calling APIs");
-    axios
+    await axios
       .post(this.backendURI + "/signup", {
         username: this.state.userName,
         password: this.state.password
       })
-      .then(function(response) {
-        console.log("Success: ", response);
+      .then(
+        res => {
+          if (res.status === 201) {
+            console.log("Signup success");
+            this.setState({ isLoggedin: true });
+            sessionStorage.setItem("token", res.data.jwt);
+          }
+        },
+        err => {
+          console.log(err.response);
+        }
+      );
+  };
+
+  loginHandler = async event => {
+    //check username and password valid
+    await axios
+      .post(this.backendURI + "/login", {
+        username: this.state.userName,
+        password: this.state.password
       })
-      .catch(function(error) {
-        console.log("Error: ", error);
-      });
+      .then(
+        res => {
+          if (res.status === 201) {
+            console.log("Logged in");
+            this.setState({ isLoggedin: true });
+            sessionStorage.setItem("token", res.data.jwt);
+          }
+        },
+        err => {
+          console.log(err.response);
+        }
+      );
   };
 
   inputHandler = event => {
     this.setState({ [event.target.name]: event.target.value });
+    console.log(this.state);
   };
 
   componentDidMount() {
@@ -45,13 +72,13 @@ class App extends React.Component {
     //true
     // this.isLoggedin = true;
     //false
-    console.log(process.env.NODE_ENV);
+    console.log(this.backendURI);
   }
 
   render() {
     return (
       <React.Fragment>
-        {this.isLoggedin ? (
+        {this.state.isLoggedin ? (
           <Router>
             <nav>
               <Link to="/">Home</Link> <br />
@@ -67,7 +94,16 @@ class App extends React.Component {
               <Link to="/signup">Signup</Link>
             </nav>
             <main>
-              <Route exact path="/" component={Login} />
+              <Route
+                exact
+                path="/"
+                render={props => (
+                  <Login
+                    loginHandler={this.loginHandler}
+                    inputHandler={this.inputHandler}
+                  />
+                )}
+              />
               <Route
                 exact
                 path="/signup"

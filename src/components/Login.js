@@ -4,11 +4,15 @@ function Login(props) {
   return (
     <div>
       <p>Login</p>
-      <form>
+      <form
+        onSubmit={event => {
+          props.loginHandler(event);
+        }}
+      >
         <label>Username</label>
-        <input />
+        <input name="userName" onChange={props.inputHandler} />
         <label>Password</label>
-        <input />
+        <input name="password" onChange={props.inputHandler} />
         <button type="submit">Login</button>
       </form>
     </div>

@@ -3,19 +3,20 @@ import { Redirect } from "react-router";
 import "../styles/Home.css";
 import axios from "axios";
 import Twit from "./Twit";
-import { FormText, Input, Form, Button } from "reactstrap";
+import { FormText, Input, Form, Button, Spinner } from "reactstrap";
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { twits: [], newtwit: "", newtwitCount: 0 };
+    this.state = { twits: [], newtwit: "", newtwitCount: 0, loading: false };
   }
 
   pullData = () => {
+    this.setState({ loading: true });
     axios.get(this.props.backendURI + "/u/" + this.props.userName).then(
       res => {
         if (res.status === 200) {
-          this.setState({ twits: res.data });
+          this.setState({ twits: res.data, loading: false });
         }
       },
       err => {
@@ -54,6 +55,7 @@ class Home extends React.Component {
     event.preventDefault();
     if (this.state.newtwit !== "") {
       console.log("Posting twit");
+      this.setState({ loading: true });
       await axios
         .post(this.props.backendURI + "/u/" + this.props.userName, {
           twit: this.state.newtwit
@@ -62,7 +64,7 @@ class Home extends React.Component {
           res => {
             if (res.status === 201) {
               console.log("Post succesful");
-              this.setState({ newtwit: "", newtwitCount: 0 });
+              this.setState({ newtwit: "", newtwitCount: 0, loading: false });
             }
           },
           err => {
@@ -75,6 +77,7 @@ class Home extends React.Component {
   };
 
   deleteTwitHandler = async (event, twitID) => {
+    this.setState({ loading: true });
     await axios
       .delete(this.props.backendURI + "/u/" + this.props.userName, {
         data: {
@@ -85,6 +88,7 @@ class Home extends React.Component {
         res => {
           if (res.status === 200) {
             console.log("Twit deleted");
+            this.setState({ loading: false });
             this.forceUpdate();
           }
         },
@@ -98,6 +102,7 @@ class Home extends React.Component {
 
   updateTwitHandler = async (event, twit, twitID, updateChild) => {
     event.preventDefault();
+    this.setState({ loading: true });
     await axios
       .put(this.props.backendURI + "/u/" + this.props.userName, {
         _id: twitID,
@@ -107,6 +112,7 @@ class Home extends React.Component {
         res => {
           if (res.status === 200) {
             console.log("Updated twit");
+            this.setState({ loading: false });
             this.forceUpdate();
           }
         },
@@ -155,6 +161,12 @@ class Home extends React.Component {
                   this.state.newtwitCount} characters left`}</FormText>{" "}
                 <Button type="submit">Post</Button>
               </div>
+              {this.state.loading ? (
+                <React.Fragment>
+                  <Spinner size="sm" color="primary" />
+                  <br />
+                </React.Fragment>
+              ) : null}
             </Form>
             <div className="twits">{twits}</div>
           </div>

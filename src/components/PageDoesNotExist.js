@@ -1,7 +1,15 @@
 import React from "react";
+import "../styles/PageDoesNotExist.css";
 
 function PageDoesNotExist(props) {
-  return <div data-testid="catch-wrong-routes">Page does not exist</div>;
+  return (
+    <React.Fragment>
+      <div className="notfound-page">
+        <img src="../logo.png" alt="icon" width="auto" />
+        <h1>Page not found!</h1>
+      </div>
+    </React.Fragment>
+  );
 }
 
 export default PageDoesNotExist;

@@ -132,7 +132,8 @@ class App extends React.Component {
       <React.Fragment>
         <Router>
           {this.state.isLoggedin ? (
-            <nav>
+            <nav className="nav-bar">
+              <Link to="/">Home</Link>
               <Link to="/logout" onClick={this.logoutHandler}>
                 Logout
               </Link>

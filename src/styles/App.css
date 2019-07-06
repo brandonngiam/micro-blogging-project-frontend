@@ -35,3 +35,11 @@
     transform: rotate(360deg);
   }
 }
+
+.nav-bar {
+  display: flex;
+  height: 5vh;
+  justify-content: space-around;
+  align-items: center;
+  font-weight: bold;
+}

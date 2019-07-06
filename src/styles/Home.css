@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.home-page {
+  display: flex;
+
+  height: 100vh;
+  background-color: #e5ebf0;
+}
+
+.notfound-page h1 {
+  font-weight: bold;
+  margin: 20px;
+}

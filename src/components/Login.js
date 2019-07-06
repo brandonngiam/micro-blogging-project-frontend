@@ -9,7 +9,6 @@ import {
   Label,
   Input,
   FormFeedback,
-  FormText,
   FormGroup
 } from "reactstrap";
 

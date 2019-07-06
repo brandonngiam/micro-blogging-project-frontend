@@ -1,9 +1,10 @@
 import React from "react";
 import { Redirect } from "react-router";
+import "../styles/Home.css";
 
 function Home(props) {
   return (
-    <div data-testid="homepage">
+    <div className="home-page">
       {props.isLoggedin ? (
         `Hello there ${props.userName}`
       ) : (

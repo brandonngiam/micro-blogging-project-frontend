@@ -7,18 +7,48 @@ import {
   Dropdown,
   DropdownToggle
 } from "reactstrap";
-import axios from "axios";
+import { Input, Button, Form } from "reactstrap";
 
 class Twit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dropdownOpen: false
+      dropdownOpen: false,
+      update: false,
+      twit: this.props.twit.twit,
+      saveOldTwit: ""
     };
   }
 
   toggle = () => {
     this.setState(prevState => ({ dropdownOpen: !prevState.dropdownOpen }));
+  };
+
+  updateTwitHandlerUI = event => {
+    const prevTwit = this.state.twit;
+    this.setState({ update: true, saveOldTwit: prevTwit });
+  };
+
+  updateOnChangeHandler = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  };
+
+  cancelUpdateHandler = () => {
+    const prevTwit = this.state.saveOldTwit;
+    this.setState({
+      update: false,
+      twit: prevTwit,
+      saveOldTwit: ""
+    });
+  };
+
+  updateTwitHandler = (event, twit, twitID) => {
+    if (this.state.saveOldTwit !== this.state.twit) {
+      this.props.updateTwitHandler(event, twit, twitID);
+      this.setState({ update: false, saveOldTwit: "" });
+    } else this.cancelUpdateHandler();
   };
 
   render() {
@@ -44,11 +74,48 @@ class Twit extends React.Component {
                 >
                   Delete
                 </DropdownItem>
+                <DropdownItem onClick={this.updateTwitHandlerUI}>
+                  Update
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
         </div>
-        <p>{this.props.twit.twit} </p>{" "}
+        {this.state.update ? (
+          <Form
+            onSubmit={event => {
+              this.updateTwitHandler(
+                event,
+                this.state.twit,
+                this.props.twit["_id"]
+              );
+            }}
+          >
+            <Input
+              type="textarea"
+              maxLength="140"
+              spellCheck="false"
+              value={this.state.twit}
+              name="twit"
+              id="twit"
+              onChange={this.updateOnChangeHandler}
+            />
+            <div className="update-button-container">
+              <Button
+                onClick={this.cancelUpdateHandler}
+                color="white"
+                size="sm"
+              >
+                X
+              </Button>
+              <Button size="sm" type="submit">
+                Update Twit
+              </Button>
+            </div>
+          </Form>
+        ) : (
+          <p>{this.props.twit.twit} </p>
+        )}
       </div>
     );
   }

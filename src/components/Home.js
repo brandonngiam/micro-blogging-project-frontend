@@ -11,8 +11,8 @@ class Home extends React.Component {
     this.state = { twits: [], newtwit: "", newtwitCount: 0 };
   }
 
-  async componentDidMount() {
-    await axios.get(this.props.backendURI + "/u/" + this.props.userName).then(
+  pullData = () => {
+    axios.get(this.props.backendURI + "/u/" + this.props.userName).then(
       res => {
         if (res.status === 200) {
           this.setState({ twits: res.data });
@@ -22,19 +22,25 @@ class Home extends React.Component {
         console.log(err);
       }
     );
+  };
+
+  async componentDidMount() {
+    console.log("Mounted");
+    await this.pullData();
+    // await axios.get(this.props.backendURI + "/u/" + this.props.userName).then(
+    //   res => {
+    //     if (res.status === 200) {
+    //       this.setState({ twits: res.data });
+    //     }
+    //   },
+    //   err => {
+    //     console.log(err);
+    //   }
+    // );
   }
 
   async componentDidUpdate() {
-    await axios.get(this.props.backendURI + "/u/" + this.props.userName).then(
-      res => {
-        if (res.status === 200) {
-          this.setState({ twits: res.data });
-        }
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    console.log("Updating");
   }
 
   newTwitOnChangeHandler = event => {
@@ -64,16 +70,7 @@ class Home extends React.Component {
           }
         );
 
-      await axios.get(this.props.backendURI + "/u/" + this.props.userName).then(
-        res => {
-          if (res.status === 200) {
-            this.setState({ twits: res.data });
-          }
-        },
-        err => {
-          console.log(err);
-        }
-      );
+      await this.pullData();
     }
   };
 
@@ -95,6 +92,29 @@ class Home extends React.Component {
           console.log(err);
         }
       );
+
+    await this.pullData();
+  };
+
+  updateTwitHandler = async (event, twit, twitID, updateChild) => {
+    event.preventDefault();
+    await axios
+      .put(this.props.backendURI + "/u/" + this.props.userName, {
+        _id: twitID,
+        twit: twit
+      })
+      .then(
+        res => {
+          if (res.status === 200) {
+            console.log("Updated twit");
+            this.forceUpdate();
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    await this.pullData();
   };
 
   render() {
@@ -106,6 +126,7 @@ class Home extends React.Component {
           twit={twit}
           backendURI={this.props.backendURI}
           deleteTwitHandler={this.deleteTwitHandler}
+          updateTwitHandler={this.updateTwitHandler}
         />
       );
     });

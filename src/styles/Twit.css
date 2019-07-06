@@ -6,7 +6,7 @@
 
 .twit-container {
   width: 50%;
-  height: 115px;
+  height: 150px;
   background-color: white;
   margin: 5px 0 5px 0;
   border: 1px solid lightgrey;
@@ -44,4 +44,10 @@
   color: black;
   border: 0;
   margin: 5px 5px 5px 5px;
+}
+
+.update-button-container {
+  padding: 2px;
+  display: flex;
+  justify-content: space-between;
 }

@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  background-color: #e5ebf0;
+  height: 100vh;
+}
+
+.login-header {
+  height: 6vh;
+  background-color: white;
+  box-shadow: 0 0 5px 0;
+}
+
+.login-header img {
+  width: 5vh;
+  height: 5vh;
+  margin: 0 0 0 20px;
+}
+
+.login-container {
+  background-color: white;
+  margin: 30px;
+  width: 40%;
+  height: auto;
+  align-self: center;
+  border: 1px solid rgb(145, 145, 145);
+}
+
+.login {
+  margin: 10%;
+}
+
+.login h3 {
+  font-weight: bold;
+  margin: 0 0 20px 0;
+}

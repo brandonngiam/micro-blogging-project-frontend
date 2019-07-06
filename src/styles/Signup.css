@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.sign-up-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #e5ebf0;
+  height: 100vh;
+}
+
+.sign-up-container {
+  background-color: white;
+  border: 1px solid rgb(145, 145, 145);
+  width: 40%;
+  height: auto;
+}
+
+.sign-up-container h3 {
+  font-weight: bold;
+  margin: 0 0 20px 0;
+}
+
+.sign-up-container ul {
+  margin: 5px 0 0 20px;
+  font-size: 11px;
+}
+
+.sign-up {
+  margin: 10%;
+}

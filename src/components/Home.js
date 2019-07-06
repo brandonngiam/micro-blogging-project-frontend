@@ -1,7 +1,16 @@
 import React from "react";
+import { Redirect } from "react-router";
 
 function Home(props) {
-  return <React.Fragment>Hello {props.username}</React.Fragment>;
+  return (
+    <div data-testid="homepage">
+      {props.isLoggedin ? (
+        `Hello there ${props.userName}`
+      ) : (
+        <Redirect to="/login" />
+      )}
+    </div>
+  );
 }
 
 export default Home;

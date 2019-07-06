@@ -46,7 +46,7 @@ class App extends React.Component {
         res => {
           if (res.status === 201) {
             console.log("Signup success");
-            this.setState({ isLoggedin: true });
+            this.setState({ isLoggedin: true, password: "" });
             sessionStorage.setItem("token", res.data.jwt);
             sessionStorage.setItem("username", this.state.userName);
             console.log("Logged in");

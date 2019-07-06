@@ -16,7 +16,6 @@ import { Redirect } from "react-router";
 //take username and password and call api - where?
 
 function Signup(props) {
-  console.log(props.isLoggedin);
   return (
     <React.Fragment>
       {props.isLoggedin ? (

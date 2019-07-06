@@ -1,0 +1,47 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.twit-container {
+  width: 50%;
+  height: 115px;
+  background-color: white;
+  margin: 5px 0 5px 0;
+  border: 1px solid lightgrey;
+}
+
+.twit-container h5 {
+  margin: 10px 10px 10px 30px;
+  font-weight: bold;
+}
+
+.twit-container h6 {
+  margin: 13px 10px 10px 30px;
+  font-size: 13px;
+}
+
+.twit-container p {
+  margin: 0 0 20px 30px;
+}
+
+.name-and-time {
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  text-align: center;
+}
+
+.nameAndTime-and-dropdown {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.dropdown {
+  background-color: white;
+  color: black;
+  border: 0;
+  margin: 5px 5px 5px 5px;
+}

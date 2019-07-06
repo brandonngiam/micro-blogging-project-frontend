@@ -7,7 +7,6 @@ import Logout from "./Logout";
 import PageDoesNotExist from "./PageDoesNotExist";
 import { checkUserName, checkPassword } from "../helper/signupValidation";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
-
 import axios from "axios";
 class App extends React.Component {
   constructor(props) {
@@ -148,6 +147,7 @@ class App extends React.Component {
                 <Home
                   userName={this.state.userName}
                   isLoggedin={this.state.isLoggedin}
+                  backendURI={this.backendURI}
                 />
               )}
             />

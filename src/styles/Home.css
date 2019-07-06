@@ -4,14 +4,17 @@
   box-sizing: border-box;
 }
 
+body {
+  background-color: #e5ebf0;
+}
+
 .home-page {
   display: flex;
   flex-direction: column;
   justify-content: center;
   justify-content: flex-start;
   align-items: center;
-  background-color: #e5ebf0;
-  height: 100vh;
+  height: 100v;
 }
 
 .notfound-page h1 {

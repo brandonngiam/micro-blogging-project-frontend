@@ -5,6 +5,7 @@ import Signup from "./Signup";
 import Home from "./Home";
 import Logout from "./Logout";
 import PageDoesNotExist from "./PageDoesNotExist";
+import ExpiredSession from "./ExpiredSession";
 import { checkUserName, checkPassword } from "../helper/signupValidation";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import axios from "axios";
@@ -124,6 +125,13 @@ class App extends React.Component {
     this.setState({ isLoggedin: false });
   };
 
+  sessionExpiredHandler = history => {
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("username");
+    this.setState({ isLoggedin: false });
+    history.push("/expiredsession");
+  };
+
   componentDidMount() {
     console.log(this.backendURI);
   }
@@ -147,10 +155,12 @@ class App extends React.Component {
               path="/"
               render={props => (
                 <Home
+                  {...props}
                   userName={this.state.userName}
                   isLoggedin={this.state.isLoggedin}
                   backendURI={this.backendURI}
                   logoutHandler={this.logoutHandler}
+                  sessionExpiredHandler={this.sessionExpiredHandler}
                 />
               )}
             />
@@ -168,17 +178,7 @@ class App extends React.Component {
                 />
               )}
             />
-            <Route
-              exact
-              path="/logout"
-              render={props => (
-                <Logout
-                  logoutHandler={this.logoutHandler}
-                  username={this.state.userName}
-                  isLoggedin={this.state.isLoggedin}
-                />
-              )}
-            />
+            <Route exact path="/logout" render={props => <Logout />} />
             <Route
               exact
               path="/signup"
@@ -193,6 +193,7 @@ class App extends React.Component {
                 />
               )}
             />
+            <Route exact path="/expiredsession" component={ExpiredSession} />
             <Route component={PageDoesNotExist} />
           </Switch>
         </Router>

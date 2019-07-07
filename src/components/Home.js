@@ -119,9 +119,12 @@ class Home extends React.Component {
               if (res.status === 200) await this.pullData();
             },
             err => {
-              if (err.message === "Request failed with status code 401")
+              if (err.message === "Request failed with status code 401") {
+                this.props.sessionExpiredHandler(this.props.history);
+              } else {
+                console.log(err.message);
                 this.props.logoutHandler();
-              else console.log(err.message);
+              }
             }
           );
       } else {

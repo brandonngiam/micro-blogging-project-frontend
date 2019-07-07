@@ -6,6 +6,7 @@ import Home from "./Home";
 import Logout from "./Logout";
 import PageDoesNotExist from "./PageDoesNotExist";
 import ExpiredSession from "./ExpiredSession";
+import OtherProfiles from "./OtherProfiles";
 import { checkUserName, checkPassword } from "../helper/signupValidation";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import axios from "axios";
@@ -194,6 +195,17 @@ class App extends React.Component {
               )}
             />
             <Route exact path="/expiredsession" component={ExpiredSession} />
+            <Route
+              path={`/u/:user`}
+              render={props => (
+                <OtherProfiles
+                  {...props}
+                  backendURI={this.backendURI}
+                  logoutHandler={this.logoutHandler}
+                  sessionExpiredHandler={this.sessionExpiredHandler}
+                />
+              )}
+            />
             <Route component={PageDoesNotExist} />
           </Switch>
         </Router>

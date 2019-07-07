@@ -1,5 +1,6 @@
 import React from "react";
 import "../styles/NewsFeed.css";
+import { Link } from "react-router-dom";
 
 function NewsFeed(props) {
   const newsFeed = props.news;
@@ -10,11 +11,10 @@ function NewsFeed(props) {
   };
   return (
     <div className="news-feed-container">
-      <p>
-        {`${newsFeed.username} ${mapActivity[newsFeed.activity]} ${
-          newsFeed.timeStamp
-        }`}
-      </p>
+      <Link className="link" to={`/u/${newsFeed.username}`}>
+        {newsFeed.username}
+      </Link>
+      <p>{`  ${mapActivity[newsFeed.activity]} ${newsFeed.timeStamp}`}</p>
     </div>
   );
 }

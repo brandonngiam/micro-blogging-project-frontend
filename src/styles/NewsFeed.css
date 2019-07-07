@@ -10,10 +10,16 @@
 }
 
 .news-feed-container {
+  display: flex;
+  flex-direction: row;
   height: 30px;
   width: 100%;
   background-color: white;
   margin: 5px 0 5px 0;
   border: 1px solid lightgrey;
   text-align: center;
+}
+
+.link {
+  margin: 0 7px 0 15px;
 }

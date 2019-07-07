@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.other-profiles-page {
+  display: flex;
+  justify-content: center;
+}
+
+.otherprofile-twit-container {
+  width: 50%;
+  height: 150px;
+  background-color: white;
+  margin: 5px 0 5px 0;
+  border: 1px solid lightgrey;
+}
+
+.otherprofile-name-and-time {
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  text-align: center;
+}
+
+.otherprofile-twit-container h5 {
+  margin: 15px 10px 10px 30px;
+  font-weight: bold;
+}
+
+.otherprofile-twit-container h6 {
+  margin: 18px 10px 10px 30px;
+  font-size: 13px;
+}
+
+.otherprofile-twit-container p {
+  margin: 10px 0 20px 30px;
+}

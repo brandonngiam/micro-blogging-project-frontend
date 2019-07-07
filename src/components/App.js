@@ -70,7 +70,7 @@ class App extends React.Component {
   loginHandler = async event => {
     event.preventDefault();
     //check username and password valid
-    this.setState({loginLoading:true})
+    this.setState({ loginLoading: true });
     await axios
       .post(this.backendURI + "/login", {
         username: this.state.userName,
@@ -80,14 +80,14 @@ class App extends React.Component {
         res => {
           if (res.status === 200) {
             console.log("Logged in");
+            sessionStorage.setItem("token", res.data.jwt);
+            sessionStorage.setItem("username", this.state.userName);
             this.setState({
               isLoggedin: true,
               password: "",
               loginUserNameError: "",
               loginPasswordError: ""
             });
-            sessionStorage.setItem("token", res.data.jwt);
-            sessionStorage.setItem("username", this.state.userName);
           }
         },
         err => {
@@ -99,8 +99,7 @@ class App extends React.Component {
             this.setState({ loginPasswordError: errMessage });
         }
       );
-    this.setState({ loginLoading: false })
-
+    this.setState({ loginLoading: false });
   };
 
   loginInputHandler = event => {
@@ -119,7 +118,7 @@ class App extends React.Component {
     }
   };
 
-  logoutHandler = event => {
+  logoutHandler = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("username");
     this.setState({ isLoggedin: false });
@@ -155,6 +154,7 @@ class App extends React.Component {
                   userName={this.state.userName}
                   isLoggedin={this.state.isLoggedin}
                   backendURI={this.backendURI}
+                  logoutHandler={this.logoutHandler}
                 />
               )}
             />

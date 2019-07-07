@@ -106,7 +106,29 @@ class Home extends React.Component {
 
   async componentDidMount() {
     console.log("Mounted");
-    await this.pullData();
+    if (this.props.isLoggedin) {
+      console.log("Checking jwt");
+      const jwt = sessionStorage.getItem("token");
+      if (jwt) {
+        await axios
+          .get(this.props.backendURI + "/secure", {
+            headers: { Authorization: "Bearer " + jwt }
+          })
+          .then(
+            async res => {
+              if (res.status === 200) await this.pullData();
+            },
+            err => {
+              if (err.message === "Request failed with status code 401")
+                this.props.logoutHandler();
+              else console.log(err.message);
+            }
+          );
+      } else {
+        console.log("You are no longer logged in");
+        this.props.logoutHandler();
+      }
+    }
   }
 
   async componentDidUpdate() {

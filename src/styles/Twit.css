@@ -13,17 +13,17 @@
 }
 
 .twit-container h5 {
-  margin: 10px 10px 10px 30px;
+  margin: 15px 10px 10px 30px;
   font-weight: bold;
 }
 
 .twit-container h6 {
-  margin: 13px 10px 10px 30px;
+  margin: 18px 10px 10px 30px;
   font-size: 13px;
 }
 
 .twit-container p {
-  margin: 0 0 20px 30px;
+  margin: 10px 0 20px 30px;
 }
 
 .name-and-time {

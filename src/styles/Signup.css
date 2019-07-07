@@ -33,3 +33,9 @@
 .sign-up {
   margin: 10%;
 }
+
+.button-and-spinner-container {
+  padding: 0 20px 0 0;
+  display: flex;
+  justify-content: space-between;
+}

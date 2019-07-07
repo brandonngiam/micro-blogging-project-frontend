@@ -23,7 +23,9 @@ class App extends React.Component {
       signupUserNameError: "",
       signupPasswordError: "",
       loginUserNameError: "",
-      loginPasswordError: ""
+      loginPasswordError: "",
+      signupLoading: false,
+      loginLoading: false
     };
   }
 
@@ -36,6 +38,7 @@ class App extends React.Component {
     )
       return;
 
+    this.setState({ signupLoading: true });
     await axios
       .post(this.backendURI + "/signup", {
         username: this.state.userName,
@@ -61,11 +64,13 @@ class App extends React.Component {
           }
         }
       );
+    this.setState({ signupLoading: false });
   };
 
   loginHandler = async event => {
     event.preventDefault();
     //check username and password valid
+    this.setState({loginLoading:true})
     await axios
       .post(this.backendURI + "/login", {
         username: this.state.userName,
@@ -94,6 +99,8 @@ class App extends React.Component {
             this.setState({ loginPasswordError: errMessage });
         }
       );
+    this.setState({ loginLoading: false })
+
   };
 
   loginInputHandler = event => {
@@ -161,6 +168,7 @@ class App extends React.Component {
                   isLoggedin={this.state.isLoggedin}
                   loginUserNameError={this.state.loginUserNameError}
                   loginPasswordError={this.state.loginPasswordError}
+                  isLoading={this.state.loginLoading}
                 />
               )}
             />
@@ -185,6 +193,7 @@ class App extends React.Component {
                   signupUserNameError={this.state.signupUserNameError}
                   signupPasswordError={this.state.signupPasswordError}
                   isLoggedin={this.state.isLoggedin}
+                  isLoading={this.state.signupLoading}
                 />
               )}
             />

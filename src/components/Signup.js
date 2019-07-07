@@ -7,7 +7,8 @@ import {
   Input,
   FormFeedback,
   FormText,
-  FormGroup
+  FormGroup,
+  Spinner
 } from "reactstrap";
 import { Redirect } from "react-router";
 
@@ -83,7 +84,12 @@ function Signup(props) {
                     </ul>
                   </FormText>
                 </FormGroup>
-                <Button type="submit">Create an account</Button>
+                <div className="button-and-spinner-container">
+                  <Button type="submit">Create an account</Button>
+                  {props.isLoading ? (
+                    <Spinner size="sm" color="primary" />
+                  ) : null}
+                </div>
               </Form>
             </div>
           </div>

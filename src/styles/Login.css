@@ -40,3 +40,9 @@
   font-weight: bold;
   margin: 0 0 20px 0;
 }
+
+.button-and-spinner-container {
+  padding: 0 20px 0 0;
+  display: flex;
+  justify-content: space-between;
+}

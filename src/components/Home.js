@@ -25,25 +25,6 @@ class Home extends React.Component {
     );
   };
 
-  async componentDidMount() {
-    console.log("Mounted");
-    await this.pullData();
-    // await axios.get(this.props.backendURI + "/u/" + this.props.userName).then(
-    //   res => {
-    //     if (res.status === 200) {
-    //       this.setState({ twits: res.data });
-    //     }
-    //   },
-    //   err => {
-    //     console.log(err);
-    //   }
-    // );
-  }
-
-  async componentDidUpdate() {
-    console.log("Updating");
-  }
-
   newTwitOnChangeHandler = event => {
     this.setState({
       [event.target.name]: event.target.value,
@@ -123,6 +104,15 @@ class Home extends React.Component {
     await this.pullData();
   };
 
+  async componentDidMount() {
+    console.log("Mounted");
+    await this.pullData();
+  }
+
+  async componentDidUpdate() {
+    console.log("Updating");
+  }
+
   render() {
     const twits = this.state.twits.map(twit => {
       return (
@@ -153,7 +143,9 @@ class Home extends React.Component {
                 id="newtwit"
                 spellCheck="false"
                 value={this.state.newtwit}
-                placeholder="What are you thinking today?"
+                placeholder={`What are you thinking today ${
+                  this.props.userName
+                }?`}
                 onChange={this.newTwitOnChangeHandler}
               />
               <div className="twit-count">

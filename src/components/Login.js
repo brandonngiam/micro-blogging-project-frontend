@@ -9,7 +9,8 @@ import {
   Label,
   Input,
   FormFeedback,
-  FormGroup
+  FormGroup,
+  Spinner
 } from "reactstrap";
 
 function Login(props) {
@@ -70,10 +71,16 @@ function Login(props) {
                   <FormFeedback>{props.loginPasswordError}</FormFeedback>
                 </FormGroup>
                 <br />
-                <Button data-testid="login-button" type="submit">
-                  Login
-                </Button>
+                <div className="button-and-spinner-container">
+                  <Button data-testid="login-button" type="submit">
+                    Login
+                  </Button>
+                  {props.isLoading ? (
+                    <Spinner size="sm" color="primary" />
+                  ) : null}
+                </div>
               </Form>
+
               <br />
               <p>
                 New to Twitta? <Link to="/signup">Sign up now</Link>

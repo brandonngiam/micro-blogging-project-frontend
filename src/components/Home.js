@@ -13,16 +13,28 @@ class Home extends React.Component {
 
   pullData = () => {
     this.setState({ loading: true });
-    axios.get(this.props.backendURI + "/u/" + this.props.userName).then(
-      res => {
-        if (res.status === 200) {
-          this.setState({ twits: res.data, loading: false });
-        }
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    const jwt = sessionStorage.getItem("token");
+    if (jwt) {
+      axios
+        .get(this.props.backendURI + "/u/" + this.props.userName, {
+          headers: { Authorization: "Bearer " + jwt }
+        })
+        .then(
+          res => {
+            if (res.status === 200) {
+              this.setState({ twits: res.data, loading: false });
+            }
+          },
+          err => {
+            if (err.message === "Request failed with status code 401") {
+              this.props.sessionExpiredHandler(this.props.history);
+            } else {
+              console.log(err.message);
+              this.props.logoutHandler();
+            }
+          }
+        );
+    }
   };
 
   newTwitOnChangeHandler = event => {
@@ -34,49 +46,72 @@ class Home extends React.Component {
 
   postTwitHandler = async event => {
     event.preventDefault();
+    this.setState({ loading: true });
     if (this.state.newtwit !== "") {
       console.log("Posting twit");
-      this.setState({ loading: true });
-      await axios
-        .post(this.props.backendURI + "/u/" + this.props.userName, {
-          twit: this.state.newtwit
-        })
-        .then(
-          res => {
-            if (res.status === 201) {
-              console.log("Post succesful");
-              this.setState({ newtwit: "", newtwitCount: 0, loading: false });
+      const jwt = sessionStorage.getItem("token");
+      if (jwt) {
+        await axios
+          .post(
+            this.props.backendURI + "/u/" + this.props.userName,
+            {
+              twit: this.state.newtwit
+            },
+            {
+              headers: { Authorization: "Bearer " + jwt }
             }
-          },
-          err => {
-            console.log(err);
-          }
-        );
+          )
+          .then(
+            res => {
+              if (res.status === 201) {
+                console.log("Post succesful");
+                this.setState({ newtwit: "", newtwitCount: 0, loading: false });
+              }
+            },
+            err => {
+              if (err.message === "Request failed with status code 401") {
+                this.props.sessionExpiredHandler(this.props.history);
+              } else {
+                console.log(err.message);
+                this.props.logoutHandler();
+              }
+            }
+          );
 
-      await this.pullData();
+        await this.pullData();
+      }
     }
   };
 
   deleteTwitHandler = async (event, twitID) => {
     this.setState({ loading: true });
-    await axios
-      .delete(this.props.backendURI + "/u/" + this.props.userName, {
-        data: {
-          _id: twitID
-        }
-      })
-      .then(
-        res => {
-          if (res.status === 200) {
-            console.log("Twit deleted");
-            this.setState({ loading: false });
-            this.forceUpdate();
+    const jwt = sessionStorage.getItem("token");
+    if (jwt) {
+      await axios
+        .delete(this.props.backendURI + "/u/" + this.props.userName, {
+          data: {
+            _id: twitID
+          },
+          headers: { Authorization: "Bearer " + jwt }
+        })
+        .then(
+          res => {
+            if (res.status === 200) {
+              console.log("Twit deleted");
+              this.setState({ loading: false });
+              this.forceUpdate();
+            }
+          },
+          err => {
+            if (err.message === "Request failed with status code 401") {
+              this.props.sessionExpiredHandler(this.props.history);
+            } else {
+              console.log(err.message);
+              this.props.logoutHandler();
+            }
           }
-        },
-        err => {
-          console.log(err);
-        }
-      );
+        );
+    }
 
     await this.pullData();
   };
@@ -84,30 +119,43 @@ class Home extends React.Component {
   updateTwitHandler = async (event, twit, twitID, updateChild) => {
     event.preventDefault();
     this.setState({ loading: true });
-    await axios
-      .put(this.props.backendURI + "/u/" + this.props.userName, {
-        _id: twitID,
-        twit: twit
-      })
-      .then(
-        res => {
-          if (res.status === 200) {
-            console.log("Updated twit");
-            this.setState({ loading: false });
-            this.forceUpdate();
+    const jwt = sessionStorage.getItem("token");
+    if (jwt) {
+      await axios
+        .put(
+          this.props.backendURI + "/u/" + this.props.userName,
+          {
+            _id: twitID,
+            twit: twit
+          },
+          {
+            headers: { Authorization: "Bearer " + jwt }
           }
-        },
-        err => {
-          console.log(err);
-        }
-      );
+        )
+        .then(
+          res => {
+            if (res.status === 200) {
+              console.log("Updated twit");
+              this.setState({ loading: false });
+              this.forceUpdate();
+            }
+          },
+          err => {
+            if (err.message === "Request failed with status code 401") {
+              this.props.sessionExpiredHandler(this.props.history);
+            } else {
+              console.log(err.message);
+              this.props.logoutHandler();
+            }
+          }
+        );
+    }
     await this.pullData();
   };
 
   async componentDidMount() {
     console.log("Mounted");
     if (this.props.isLoggedin) {
-      console.log("Checking jwt");
       const jwt = sessionStorage.getItem("token");
       if (jwt) {
         await axios
@@ -116,7 +164,10 @@ class Home extends React.Component {
           })
           .then(
             async res => {
-              if (res.status === 200) await this.pullData();
+              if (res.status === 200) {
+                console.log("Valid session");
+                await this.pullData();
+              }
             },
             err => {
               if (err.message === "Request failed with status code 401") {

@@ -11,7 +11,7 @@ function NewsFeed(props) {
   return (
     <div className="news-feed-container">
       <p>
-        {`${newsFeed.username} just ${mapActivity[newsFeed.activity]} about ${
+        {`${newsFeed.username} just ${mapActivity[newsFeed.activity]} ${
           newsFeed.timeStamp
         }`}
       </p>

@@ -48,9 +48,9 @@ class App extends React.Component {
         res => {
           if (res.status === 201) {
             console.log("Signup success");
-            this.setState({ isLoggedin: true, password: "" });
             sessionStorage.setItem("token", res.data.jwt);
             sessionStorage.setItem("username", this.state.userName);
+            this.setState({ isLoggedin: true, password: "" });
             console.log("Logged in");
           }
         },
@@ -125,10 +125,6 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    //check whether i am logged in
-    //true
-    // this.isLoggedin = true;
-    //false <br />
     console.log(this.backendURI);
   }
 

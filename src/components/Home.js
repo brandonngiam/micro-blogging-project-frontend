@@ -2,13 +2,20 @@ import React from "react";
 import { Redirect } from "react-router";
 import "../styles/Home.css";
 import axios from "axios";
-import Twit from "./Twit";
-import { FormText, Input, Form, Button, Spinner } from "reactstrap";
+import ProfilePage from "./ProfilePage";
+import NewsFeed from "./NewsFeed";
+import { filterAndCleanNewsFeed } from "../helper/filterAndCleanNewsFeed";
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { twits: [], newtwit: "", newtwitCount: 0, loading: false };
+    this.state = {
+      twits: [],
+      newsfeed: [],
+      newtwit: "",
+      newtwitCount: 0,
+      loading: false
+    };
   }
 
   pullData = () => {
@@ -23,6 +30,32 @@ class Home extends React.Component {
           res => {
             if (res.status === 200) {
               this.setState({ twits: res.data, loading: false });
+            }
+          },
+          err => {
+            if (err.message === "Request failed with status code 401") {
+              this.props.sessionExpiredHandler(this.props.history);
+            } else {
+              console.log(err.message);
+              this.props.logoutHandler();
+            }
+          }
+        );
+    }
+  };
+
+  getNewsfeed = () => {
+    this.setState({ loading: true });
+    const jwt = sessionStorage.getItem("token");
+    if (jwt) {
+      axios
+        .get(this.props.backendURI + "/newsfeed", {
+          headers: { Authorization: "Bearer " + jwt }
+        })
+        .then(
+          res => {
+            if (res.status === 200) {
+              this.setState({ newsfeed: res.data, loading: false });
             }
           },
           err => {
@@ -167,6 +200,7 @@ class Home extends React.Component {
               if (res.status === 200) {
                 console.log("Valid session");
                 await this.pullData();
+                await this.getNewsfeed();
               }
             },
             err => {
@@ -190,53 +224,38 @@ class Home extends React.Component {
   }
 
   render() {
-    const twits = this.state.twits.map(twit => {
-      return (
-        <Twit
-          key={twit["_id"]}
-          userName={this.props.userName}
-          twit={twit}
-          backendURI={this.props.backendURI}
-          deleteTwitHandler={this.deleteTwitHandler}
-          updateTwitHandler={this.updateTwitHandler}
-        />
-      );
+    const newsFeedFiltered = filterAndCleanNewsFeed(
+      this.state.newsfeed,
+      this.props.userName
+    );
+    const newsFeedComponent = newsFeedFiltered.map(news => {
+      return <NewsFeed news={news} />;
     });
 
     return (
       <React.Fragment>
         {this.props.isLoggedin ? (
           <div className="home-page">
-            <Form
-              className="new-twit-container"
-              onSubmit={this.postTwitHandler}
-            >
-              <Input
-                type="textarea"
-                maxLength="140"
-                className="new-twit"
-                name="newtwit"
-                id="newtwit"
-                spellCheck="false"
-                value={this.state.newtwit}
-                placeholder={`What are you thinking today ${
-                  this.props.userName
-                }?`}
-                onChange={this.newTwitOnChangeHandler}
-              />
-              <div className="twit-count">
-                <FormText>{`${140 -
-                  this.state.newtwitCount} characters left`}</FormText>{" "}
-                <Button type="submit">Post</Button>
+            <div className="newsfeed-and-twits">
+              <div className="item1">
+                <h4>News Feed</h4>
+                {newsFeedComponent}
               </div>
-              {this.state.loading ? (
-                <React.Fragment>
-                  <Spinner size="sm" color="primary" />
-                  <br />
-                </React.Fragment>
-              ) : null}
-            </Form>
-            <div className="twits">{twits}</div>
+              <ProfilePage
+                className="item2"
+                twits={this.state.twits}
+                userName={this.props.userName}
+                backendURI={this.props.backendURI}
+                deleteTwitHandler={this.deleteTwitHandler}
+                updateTwitHandler={this.updateTwitHandler}
+                postTwitHandler={this.postTwitHandler}
+                newtwit={this.state.newtwit}
+                newTwitOnChangeHandler={this.newTwitOnChangeHandler}
+                newtwitCount={this.state.newtwitCount}
+                loading={this.state.loading}
+              />
+              <div className="item3">{null}</div>
+            </div>
           </div>
         ) : (
           <Redirect to="/login" />

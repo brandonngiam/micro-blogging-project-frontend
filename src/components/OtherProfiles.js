@@ -10,7 +10,7 @@ class OtherProfiles extends React.Component {
   }
 
   pullData = () => {
-    const jwt = sessionStorage.getItem("token");
+    const jwt = localStorage.getItem("token");
     if (jwt) {
       axios
         .get(this.props.backendURI + "/u/" + this.props.match.params.user, {

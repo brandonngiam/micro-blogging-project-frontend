@@ -19,8 +19,8 @@ class App extends React.Component {
         : "http://localhost:3001";
     //change me
     this.state = {
-      isLoggedin: sessionStorage.getItem("token") !== null,
-      userName: sessionStorage.getItem("username") || "",
+      isLoggedin: localStorage.getItem("token") !== null,
+      userName: localStorage.getItem("username") || "",
       password: "",
       signupUserNameError: "",
       signupPasswordError: "",
@@ -50,8 +50,8 @@ class App extends React.Component {
         res => {
           if (res.status === 201) {
             console.log("Signup success");
-            sessionStorage.setItem("token", res.data.jwt);
-            sessionStorage.setItem("username", this.state.userName);
+            localStorage.setItem("token", res.data.jwt);
+            localStorage.setItem("username", this.state.userName);
             this.setState({ isLoggedin: true, password: "" });
             console.log("Logged in");
           }
@@ -82,8 +82,8 @@ class App extends React.Component {
         res => {
           if (res.status === 200) {
             console.log("Logged in");
-            sessionStorage.setItem("token", res.data.jwt);
-            sessionStorage.setItem("username", this.state.userName);
+            localStorage.setItem("token", res.data.jwt);
+            localStorage.setItem("username", this.state.userName);
             this.setState({
               isLoggedin: true,
               password: "",
@@ -121,14 +121,14 @@ class App extends React.Component {
   };
 
   logoutHandler = () => {
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("username");
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
     this.setState({ isLoggedin: false });
   };
 
   sessionExpiredHandler = history => {
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("username");
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
     this.setState({ isLoggedin: false });
     history.push("/expiredsession");
   };

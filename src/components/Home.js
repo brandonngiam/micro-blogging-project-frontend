@@ -20,7 +20,7 @@ class Home extends React.Component {
 
   pullData = () => {
     this.setState({ loading: true });
-    const jwt = sessionStorage.getItem("token");
+    const jwt = localStorage.getItem("token");
     if (jwt) {
       axios
         .get(this.props.backendURI + "/u/" + this.props.userName, {
@@ -46,7 +46,7 @@ class Home extends React.Component {
 
   getNewsfeed = () => {
     this.setState({ loading: true });
-    const jwt = sessionStorage.getItem("token");
+    const jwt = localStorage.getItem("token");
     if (jwt) {
       axios
         .get(this.props.backendURI + "/newsfeed", {
@@ -82,7 +82,7 @@ class Home extends React.Component {
     this.setState({ loading: true });
     if (this.state.newtwit !== "") {
       console.log("Posting twit");
-      const jwt = sessionStorage.getItem("token");
+      const jwt = localStorage.getItem("token");
       if (jwt) {
         await axios
           .post(
@@ -118,7 +118,7 @@ class Home extends React.Component {
 
   deleteTwitHandler = async (event, twitID) => {
     this.setState({ loading: true });
-    const jwt = sessionStorage.getItem("token");
+    const jwt = localStorage.getItem("token");
     if (jwt) {
       await axios
         .delete(this.props.backendURI + "/u/" + this.props.userName, {
@@ -152,7 +152,7 @@ class Home extends React.Component {
   updateTwitHandler = async (event, twit, twitID, updateChild) => {
     event.preventDefault();
     this.setState({ loading: true });
-    const jwt = sessionStorage.getItem("token");
+    const jwt = localStorage.getItem("token");
     if (jwt) {
       await axios
         .put(
@@ -189,7 +189,7 @@ class Home extends React.Component {
   async componentDidMount() {
     console.log("Mounted");
     if (this.props.isLoggedin) {
-      const jwt = sessionStorage.getItem("token");
+      const jwt = localStorage.getItem("token");
       if (jwt) {
         await axios
           .get(this.props.backendURI + "/secure", {
